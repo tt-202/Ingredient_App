@@ -30,6 +30,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 <Link href="/" className="text-xl font-bold text-gray-900">
                   Ingredient Imposter
                 </Link>
+                <Link href="/settings" className="text-sm font-medium text-gray-700 hover:text-gray-900">
+                  Settings
+                </Link>
               </div>
               <Link
                 href="/account"
