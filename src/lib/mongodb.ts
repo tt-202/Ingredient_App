@@ -6,19 +6,13 @@ const options = {};
 let client;
 let clientPromise: Promise<MongoClient>;
 
-// Extend the NodeJS global object type
 declare global {
-    namespace NodeJS {
-        interface Global {
-            _mongoClientPromise?: Promise<MongoClient>;
-        }
+    interface Global {
+        _mongoClientPromise?: Promise<MongoClient>;
     }
 }
 
-// Ensure it's defined
-const globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-};
+const globalWithMongo = global as Global;
 
 if (!process.env.MONGODB_URI) {
     throw new Error('Please add MONGODB_URI to your .env.local');
