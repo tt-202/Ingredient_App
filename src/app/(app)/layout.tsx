@@ -10,18 +10,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const { data: session, isPending } = authClient.useSession();
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* Grid background pattern */}
-      <div className="absolute inset-0 bg-[#F1F5F9] bg-opacity-90">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-          `,
-          backgroundSize: '4rem 4rem'
-        }} />
-      </div>
+      {/* Background image only for troubleshooting */}
+      <div className="absolute inset-0 z-0" style={{
+        backgroundImage: "url('/background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        opacity: 1
+      }} />
+      {/* Grid overlay temporarily removed for troubleshooting */}
 
-      <div className="relative min-h-screen flex flex-col">
+      <div className="relative min-h-screen flex flex-col z-20">
         {/* Header with user info */}
         <header className="bg-white shadow">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

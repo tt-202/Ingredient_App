@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from '@/lib/auth-client';
 
@@ -10,6 +10,65 @@ function App() {
     const [results, setResults] = useState<{ [ingredient: string]: any[] }>({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    // Allergies and search history state
+    const [allergies, setAllergies] = useState<string[]>([]);
+    const [searchHistory, setSearchHistory] = useState<{
+        ingredient: string;
+        date: string;
+        bestSubstitute?: string;
+        allergenInfo?: string;
+    }[]>([]);
+    const [preferences, setPreferences] = useState<any>(null);
+
+    // Load allergies, search history, and preferences from localStorage on mount
+    useEffect(() => {
+        const storedAllergies = localStorage.getItem('userAllergies');
+        if (storedAllergies) {
+            try {
+                setAllergies(JSON.parse(storedAllergies));
+            } catch { }
+        }
+        const storedHistory = localStorage.getItem('searchHistory');
+        if (storedHistory) {
+            try {
+                setSearchHistory(JSON.parse(storedHistory));
+            } catch { }
+        }
+        const storedPreferences = localStorage.getItem('userPreferences');
+        if (storedPreferences) {
+            try {
+                setPreferences(JSON.parse(storedPreferences));
+            } catch { }
+        }
+    }, []);
+
+    // Helper to summarize preferences for prompt
+    const getPreferenceSummary = () => {
+        if (!preferences) return '';
+        const scale = (val: number, min: string, max: string) => {
+            if (val <= 1) return min;
+            if (val >= 5) return max;
+            if (val <= 2) return `slightly ${min}`;
+            if (val >= 4) return `slightly ${max}`;
+            return 'moderate';
+        };
+        return `The user prefers: ${scale(preferences.spice_tolerance, 'mild spice', 'very spicy')}, ${scale(preferences.sweetness_preference, 'not sweet', 'very sweet')}, ${scale(preferences.saltiness_preference, 'low salt', 'salty')}, ${scale(preferences.acidity_sourness_preference, 'mild acidity', 'very sour')}, ${scale(preferences.health_consciousness, 'indulgent', 'lean/healthy')}, ${scale(preferences.budget_tolerance, 'cheap', 'expensive')
+            }.`;
+    };
+
+    // Save search to history (now includes best substitute and its allergen info)
+    const saveSearchToHistory = (ingredient: string, bestSubstitute: string, allergenInfo: string) => {
+        const now = new Date();
+        const entry = {
+            ingredient,
+            date: now.toLocaleString(),
+            bestSubstitute,
+            allergenInfo
+        };
+        const updatedHistory = [entry, ...searchHistory].slice(0, 20); // keep last 20
+        setSearchHistory(updatedHistory);
+        localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+    };
 
     const findSubstitutes = async (ingredients: string[]) => {
         setLoading(true);
@@ -27,7 +86,8 @@ function App() {
         const allResults: { [ingredient: string]: any[] } = {};
 
         for (const ingredient of ingredients) {
-            const prompt = `For the ingredient '${ingredient}', suggest 1–3 suitable substitutes. For each suggestion, return:\n- 'substitute'\n- 'score' (0–100 relevance)\n- 'reason'\n- 'cuisine_context' (optional)\n- 'allergen_info' (e.g. dairy, nuts)\n- 'historical_notes' (brief food history). Return the output as a JSON array.`;
+            const preferenceSummary = getPreferenceSummary();
+            const prompt = `For the ingredient '${ingredient}', suggest 1–3 suitable substitutes. For each suggestion, return:\n- 'substitute'\n- 'score' (0–100 relevance)\n- 'reason'\n- 'cuisine_context' (optional)\n- 'allergen_info' (e.g. dairy, nuts)\n- 'historical_notes' (brief food history). ${preferenceSummary} Return the output as a JSON array.`;
 
             const payload = {
                 contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -75,6 +135,19 @@ function App() {
                 }
 
                 allResults[ingredient] = parsed;
+
+                // Save to search history (only first ingredient for now)
+                if (ingredients.length > 0) {
+                    // Find best substitute (highest score)
+                    let bestSub = '';
+                    let bestAllergen = '';
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        const best = parsed.reduce((a, b) => (a.score > b.score ? a : b));
+                        bestSub = best.substitute;
+                        bestAllergen = best.allergen_info || '';
+                    }
+                    saveSearchToHistory(ingredient, bestSub, bestAllergen);
+                }
             } catch (err: any) {
                 setError(`Error for ingredient "${ingredient}": ${err.message}`);
             }
@@ -102,18 +175,55 @@ function App() {
 
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start p-6 font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex flex-col items-center justify-start p-6 font-sans">
             <div className="flex justify-between items-center w-full max-w-2xl mb-4">
                 <h1 className="text-4xl font-bold text-indigo-700">Smart Swap</h1>
                 <button
                     onClick={handleLogout}
-                    className="text-sm bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                    className="text-black underline hover:underline text-base font-bold bg-transparent border-none p-0 m-0 shadow-none transition-all hover:text-indigo-700 hover:underline decoration-2 hover:decoration-indigo-700"
                 >
                     Logout
                 </button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-2xl">
+            {/* Allergies Display */}
+            {allergies.length > 0 && (
+                <div className="w-full max-w-2xl mb-4 p-4 bg-red-100 border-l-4 border-red-700 rounded">
+                    <h2 className="font-semibold text-red-800 mb-1">Your Allergies:</h2>
+                    <div className="flex flex-wrap gap-2">
+                        {allergies.map((allergy, idx) => (
+                            <span key={idx} className="bg-red-200 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
+                                {allergy}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Search History Display */}
+            {searchHistory.length > 0 && (
+                <div className="w-full max-w-2xl mb-4 p-4 bg-gray-100 border-l-4 border-gray-400 rounded">
+                    <h2 className="font-semibold text-gray-800 mb-1">Search History:</h2>
+                    <ul className="text-sm text-gray-700 space-y-2">
+                        {searchHistory.map((entry, idx) => (
+                            <li key={idx} className="flex flex-col gap-1 border-b border-gray-200 pb-2 last:border-b-0">
+                                <div className="flex justify-between">
+                                    <span><strong>Ingredient:</strong> {entry.ingredient}</span>
+                                    <span className="text-gray-500 ml-4">{entry.date}</span>
+                                </div>
+                                {entry.bestSubstitute && (
+                                    <div><strong>Best Substitute:</strong> {entry.bestSubstitute}</div>
+                                )}
+                                {entry.allergenInfo && (
+                                    <div><strong>Allergen Info:</strong> {entry.allergenInfo}</div>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            <div className="w-full max-w-2xl">
                 <label className="block text-sm font-semibold mb-2">Ingredient to Substitute:</label>
                 <div className="flex gap-2 mb-4">
                     <input

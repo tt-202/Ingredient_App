@@ -4,19 +4,16 @@ import { ReactNode } from 'react';
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* Grid background pattern */}
-      <div className="absolute inset-0 bg-[#F1F5F9] bg-opacity-90">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-          `,
-          backgroundSize: '4rem 4rem'
-        }} />
-      </div>
-
+      {/* Background image */}
+      <div className="absolute inset-0 z-0" style={{
+        backgroundImage: "url('/background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        opacity: 1
+      }} />
       {/* Content */}
-      <div className="relative min-h-screen flex flex-col">
+      <div className="relative min-h-screen flex flex-col z-20">
         <main className="flex-grow flex items-center justify-center py-7 px-4 sm:px-6 lg:px-8">
           {children}
         </main>
