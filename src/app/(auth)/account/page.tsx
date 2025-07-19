@@ -36,8 +36,8 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="max-w-lg w-full space-y-4 p-4">
-      <div className="bg-white shadow-lg rounded-xl p-8 space-y-4 border border-gray-100">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="max-w-lg w-full bg-white/60 backdrop-blur-lg p-8 rounded-lg shadow-md">
         <div className="space-y-3">
           <div className="text-center">
             <div className="h-24 w-24 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-2">
@@ -47,7 +47,7 @@ export default function AccountPage() {
             </div>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">Profile Information</h2>
           </div>
-          
+
           <div className="space-y-5">
             <div className="bg-gray-100 rounded-lg p-4 py-2">
               <label className="block text-sm font-bold text-gray-600 mb-1">Email</label>

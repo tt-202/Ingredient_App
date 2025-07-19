@@ -70,6 +70,12 @@ function App() {
         localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
     };
 
+    // Clear search history
+    const clearSearchHistory = () => {
+        setSearchHistory([]);
+        localStorage.removeItem('searchHistory');
+    };
+
     const findSubstitutes = async (ingredients: string[]) => {
         setLoading(true);
         setResults({});
@@ -175,111 +181,121 @@ function App() {
 
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex flex-col items-center justify-start p-6 font-sans">
-            <div className="flex justify-between items-center w-full max-w-2xl mb-4">
-                <h1 className="text-4xl font-bold text-indigo-700">Smart Swap</h1>
-                <button
-                    onClick={handleLogout}
-                    className="text-black underline hover:underline text-base font-bold bg-transparent border-none p-0 m-0 shadow-none transition-all hover:text-indigo-700 hover:underline decoration-2 hover:decoration-indigo-700"
-                >
-                    Logout
-                </button>
-            </div>
-
-            {/* Allergies Display */}
-            {allergies.length > 0 && (
-                <div className="w-full max-w-2xl mb-4 p-4 bg-red-100 border-l-4 border-red-700 rounded">
-                    <h2 className="font-semibold text-red-800 mb-1">Your Allergies:</h2>
-                    <div className="flex flex-wrap gap-2">
-                        {allergies.map((allergy, idx) => (
-                            <span key={idx} className="bg-red-200 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
-                                {allergy}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {/* Search History Display */}
-            {searchHistory.length > 0 && (
-                <div className="w-full max-w-2xl mb-4 p-4 bg-gray-100 border-l-4 border-gray-400 rounded">
-                    <h2 className="font-semibold text-gray-800 mb-1">Search History:</h2>
-                    <ul className="text-sm text-gray-700 space-y-2">
-                        {searchHistory.map((entry, idx) => (
-                            <li key={idx} className="flex flex-col gap-1 border-b border-gray-200 pb-2 last:border-b-0">
-                                <div className="flex justify-between">
-                                    <span><strong>Ingredient:</strong> {entry.ingredient}</span>
-                                    <span className="text-gray-500 ml-4">{entry.date}</span>
-                                </div>
-                                {entry.bestSubstitute && (
-                                    <div><strong>Best Substitute:</strong> {entry.bestSubstitute}</div>
-                                )}
-                                {entry.allergenInfo && (
-                                    <div><strong>Allergen Info:</strong> {entry.allergenInfo}</div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-
-            <div className="w-full max-w-2xl">
-                <label className="block text-sm font-semibold mb-2">Ingredient to Substitute:</label>
-                <div className="flex gap-2 mb-4">
-                    <input
-                        type="text"
-                        value={ingredientInput}
-                        onChange={(e) => setIngredientInput(e.target.value)}
-                        className="flex-1 border border-gray-300 rounded px-4 py-2"
-                        placeholder="e.g., Butter"
-                        disabled={loading}
-                    />
+        <div className="min-h-screen flex flex-col items-center justify-start p-6 font-sans">
+            <div className="w-full max-w-4xl bg-white/60 backdrop-blur-lg p-8 rounded-lg shadow-md">
+                <div className="flex justify-between items-center w-full max-w-2xl mb-4">
+                    <h1 className="text-4xl font-bold text-indigo-700">Smart Swap</h1>
                     <button
-                        onClick={handleTextSearch}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        disabled={loading || !ingredientInput.trim()}
+                        onClick={handleLogout}
+                        className="text-black underline hover:underline text-base font-bold bg-transparent border-none p-0 m-0 shadow-none transition-all hover:text-indigo-700 hover:underline decoration-2 hover:decoration-indigo-700"
                     >
-                        Submit
+                        Logout
                     </button>
                 </div>
-            </div>
 
-            {loading && (
-                <div className="mt-6 text-gray-600">
-                    <p>Finding substitutes...</p>
-                </div>
-            )}
-
-            {error && (
-                <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded w-full max-w-xl">
-                    {error}
-                </div>
-            )}
-
-            {!loading && Object.keys(results).length > 0 && (
-                <div className="mt-8 w-full max-w-3xl space-y-6">
-                    {Object.entries(results).map(([ingredient, subs]) => (
-                        <div key={ingredient} className="mb-4 p-3 border-l-4 border-blue-500 bg-blue-50 rounded">
-                            <h2 className="font-semibold mb-2">Substitutes for <span className="text-indigo-700">{ingredient}</span>:</h2>
-                            {Array.isArray(subs) && subs.map((item, subIdx) => (
-                                <div key={subIdx} className="mb-2 pl-2">
-                                    <p><strong>{item.substitute}</strong> — Score: {item.score}/100</p>
-                                    <p className="text-sm text-gray-700">{item.reason}</p>
-                                    {item.cuisine_context && (
-                                        <p className="text-sm text-gray-600">Cuisine: {item.cuisine_context}</p>
-                                    )}
-                                    {item.allergen_info && (
-                                        <p className="text-sm text-red-600">Allergen Info: {item.allergen_info}</p>
-                                    )}
-                                    {item.historical_notes && (
-                                        <p className="text-sm text-gray-600 italic">History: {item.historical_notes}</p>
-                                    )}
-                                </div>
+                {/* Allergies Display */}
+                {allergies.length > 0 && (
+                    <div className="w-full max-w-2xl mb-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+                        <h2 className="font-semibold text-blue-800 mb-1">Your Allergies:</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {allergies.map((allergy, idx) => (
+                                <span key={idx} className="bg-blue-200 text-blue-900 px-3 py-1 rounded-full text-sm font-medium">
+                                    {allergy}
+                                </span>
                             ))}
                         </div>
-                    ))}
+                    </div>
+                )}
+
+                {/* Search History Display */}
+                {searchHistory.length > 0 && (
+                    <div className="w-full max-w-2xl mb-4 p-4 bg-gray-100 border-l-4 border-gray-400 rounded">
+                        <div className="flex justify-between items-center mb-1">
+                            <h2 className="font-semibold text-gray-800">Search History:</h2>
+                            <button
+                                onClick={clearSearchHistory}
+                                className="text-sm text-gray-600 hover:text-gray-800 underline"
+                            >
+                                Clear History
+                            </button>
+                        </div>
+                        <ul className="text-sm text-gray-700 space-y-2">
+                            {searchHistory.map((entry, idx) => (
+                                <li key={idx} className="flex flex-col gap-1 border-b border-gray-200 pb-2 last:border-b-0">
+                                    <div className="flex justify-between">
+                                        <span><strong>Ingredient:</strong> {entry.ingredient}</span>
+                                        <span className="text-gray-500 ml-4">{entry.date}</span>
+                                    </div>
+                                    {entry.bestSubstitute && (
+                                        <div><strong>Best Substitute:</strong> {entry.bestSubstitute}</div>
+                                    )}
+                                    {entry.allergenInfo && (
+                                        <div><strong>Allergen Info:</strong> {entry.allergenInfo}</div>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                <div className="w-full max-w-2xl">
+                    <label className="block text-sm font-semibold mb-2">Ingredient to Substitute:</label>
+                    <div className="flex gap-2 mb-4">
+                        <input
+                            type="text"
+                            value={ingredientInput}
+                            onChange={(e) => setIngredientInput(e.target.value)}
+                            className="flex-1 border border-gray-300 rounded px-4 py-2"
+                            placeholder="e.g., Butter"
+                            disabled={loading}
+                        />
+                        <button
+                            onClick={handleTextSearch}
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            disabled={loading || !ingredientInput.trim()}
+                        >
+                            Submit
+                        </button>
+                    </div>
                 </div>
-            )}
+
+                {loading && (
+                    <div className="mt-6 text-gray-600">
+                        <p>Finding substitutes...</p>
+                    </div>
+                )}
+
+                {error && (
+                    <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded w-full max-w-xl">
+                        {error}
+                    </div>
+                )}
+
+                {!loading && Object.keys(results).length > 0 && (
+                    <div className="mt-8 w-full max-w-3xl space-y-6">
+                        {Object.entries(results).map(([ingredient, subs]) => (
+                            <div key={ingredient} className="mb-4 p-3 border-l-4 border-blue-500 bg-blue-50 rounded">
+                                <h2 className="font-semibold mb-2">Substitutes for <span className="text-indigo-700">{ingredient}</span>:</h2>
+                                {Array.isArray(subs) && subs.map((item, subIdx) => (
+                                    <div key={subIdx} className="mb-2 pl-2">
+                                        <p><strong>{item.substitute}</strong> — Score: {item.score}/100</p>
+                                        <p className="text-sm text-gray-700">{item.reason}</p>
+                                        {item.cuisine_context && (
+                                            <p className="text-sm text-gray-600">Cuisine: {item.cuisine_context}</p>
+                                        )}
+                                        {item.allergen_info && (
+                                            <p className="text-sm text-red-600">Allergen Info: {item.allergen_info}</p>
+                                        )}
+                                        {item.historical_notes && (
+                                            <p className="text-sm text-gray-600 italic">History: {item.historical_notes}</p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

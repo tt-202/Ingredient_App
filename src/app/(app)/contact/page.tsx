@@ -48,18 +48,8 @@ const teamMembers: TeamMember[] = [
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
-            {/* Header */}
-            <div className="bg-white shadow-sm border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center py-4">
-                        <h1 className="text-3xl font-bold text-gray-900">Contact Our Team</h1>
-                    </div>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="min-h-screen flex items-center justify-center p-6">
+            <div className="w-full max-w-7xl bg-white/60 backdrop-blur-lg p-8 rounded-lg shadow-md">
                 {/* Introduction */}
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -100,51 +90,45 @@ export default function ContactPage() {
                 </div>
 
                 {/* Contact Information */}
-                <div className="bg-white rounded-xl shadow-lg p-8">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                        Get In Touch
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Contact Details */}
-                        <div>
-                            <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                                Contact Information
-                            </h4>
-                            <div className="space-y-3">
-                                <div className="flex items-center">
-                                    <span className="text-gray-500 mr-3">📧</span>
-                                    <span className="text-gray-700">group19@ucf.edu</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <span className="text-gray-500 mr-3">📱</span>
-                                    <span className="text-gray-700">+1 (407) 823-2000</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <span className="text-gray-500 mr-3">📍</span>
-                                    <span className="text-gray-700">UCF Orlando, FL</span>
-                                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Contact Details */}
+                    <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                            Contact Information
+                        </h4>
+                        <div className="space-y-3">
+                            <div className="flex items-center">
+                                <span className="text-gray-500 mr-3">📧</span>
+                                <span className="text-gray-700">group19@ucf.edu</span>
+                            </div>
+                            <div className="flex items-center">
+                                <span className="text-gray-500 mr-3">📱</span>
+                                <span className="text-gray-700">+1 (407) 823-2000</span>
+                            </div>
+                            <div className="flex items-center">
+                                <span className="text-gray-500 mr-3">📍</span>
+                                <span className="text-gray-700">UCF Orlando, FL</span>
                             </div>
                         </div>
+                    </div>
 
-                        {/* Office Hours */}
-                        <div>
-                            <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                                Office Hours
-                            </h4>
-                            <div className="space-y-2">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Monday - Friday</span>
-                                    <span className="text-gray-900 font-medium">9:00 AM - 6:00 PM</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Saturday</span>
-                                    <span className="text-gray-900 font-medium">10:00 AM - 4:00 PM</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Sunday</span>
-                                    <span className="text-gray-900 font-medium">Closed</span>
-                                </div>
+                    {/* Office Hours */}
+                    <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                            Office Hours
+                        </h4>
+                        <div className="space-y-2">
+                            <div className="flex justify-between">
+                                <span className="text-gray-600">Monday - Friday</span>
+                                <span className="text-gray-900 font-medium">9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-gray-600">Saturday</span>
+                                <span className="text-gray-900 font-medium">10:00 AM - 4:00 PM</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-gray-600">Sunday</span>
+                                <span className="text-gray-900 font-medium">Closed</span>
                             </div>
                         </div>
                     </div>

@@ -21,8 +21,8 @@ export default async function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="w-full">
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-4xl bg-white/60 backdrop-blur-lg p-8 rounded-lg shadow-md">
                 <h1 className="text-4xl font-bold mb-8 text-center text-indigo-800 tracking-tight drop-shadow-sm">Settings</h1>
                 <SettingsForm initialSettings={userSettings} />
             </div>

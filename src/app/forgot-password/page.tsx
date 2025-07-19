@@ -32,56 +32,50 @@ export default function ForgotPasswordPage() {
     };
 
     const content = status === 'success' ? (
-        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
-            <div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Check Your Email
-                </h2>
-                <p className="mt-2 text-center text-sm text-gray-600">
-                    We've sent a password reset link to {email}. Please check your inbox and follow the instructions.
-                </p>
-            </div>
-            <div className="text-center">
+        <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Check Your Email
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+                We've sent a password reset link to {email}. Please check your inbox and follow the instructions.
+            </p>
+            <div className="text-center mt-6">
                 <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                     Return to login
                 </Link>
             </div>
         </div>
     ) : (
-        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
-            <div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Forgot Your Password?
-                </h2>
-                <p className="mt-2 text-center text-sm text-gray-600">
-                    Enter your email address below and we'll send you a link to reset your password.
-                </p>
-            </div>
+        <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Forgot Your Password?
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+                Enter your email address below and we'll send you a link to reset your password.
+            </p>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                <div className="rounded-md shadow-sm -space-y-px">
-                    <div>
-                        <label htmlFor="email-address" className="sr-only">
-                            Email address
-                        </label>
-                        <input
-                            id="email-address"
-                            name="email"
-                            type="email"
-                            autoComplete="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            placeholder="Email address"
-                        />
-                    </div>
+                <div>
+                    <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                        Email address
+                    </label>
+                    <input
+                        id="email-address"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-900"
+                        placeholder="Email address"
+                    />
                 </div>
 
                 <div>
                     <button
                         type="submit"
                         disabled={status === 'loading'}
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
                     >
                         {status === 'loading' ? 'Sending...' : 'Send Reset Link'}
                     </button>
@@ -110,38 +104,9 @@ export default function ForgotPasswordPage() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 relative">
-            {/* Grid background pattern */}
-            <div className="absolute inset-0 bg-[#F1F5F9] bg-opacity-90">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: `
-                    linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-                    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
-                `,
-                    backgroundSize: '4rem 4rem'
-                }} />
-            </div>
-
-            {/* Content */}
-            <div className="relative min-h-screen flex flex-col">
-                <main className="flex-grow flex items-center justify-center py-7 px-4 sm:px-6 lg:px-8">
-                    {content}
-                </main>
-
-                {/* Footer */}
-                <footer className="bg-black text-gray-300">
-                    <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4">
-                        <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-4 sm:gap-12">
-                            <div>
-                                Need Help?&nbsp;
-                                <Link href="/contact" className="text-white font-medium transition-colors duration-300 hover:text-gray-300">
-                                    Contact Us
-                                </Link>
-                            </div>
-                            <div>© Ingredient Imposter {new Date().getFullYear()}</div>
-                        </div>
-                    </div>
-                </footer>
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full space-y-8 bg-white/60 backdrop-blur-lg p-8 rounded-lg shadow-md">
+                {content}
             </div>
         </div>
     );
