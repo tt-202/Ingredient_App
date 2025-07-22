@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from '@/lib/auth-server-utils';
 import SettingsForm from '../../components/SettingsForm';
 import { getUserSettings } from './actions';
+import { ObjectId } from 'mongodb';
 
 export default async function SettingsPage() {
     const session = await getServerSession();
@@ -16,6 +17,7 @@ export default async function SettingsPage() {
 
     if (!userSettings) {
         userSettings = {
+            _id: new ObjectId(),
             diet: '',
             allergies: [],
             spice_tolerance: 3,
