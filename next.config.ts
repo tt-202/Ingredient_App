@@ -3,17 +3,19 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: '50mb',
+      bodySizeLimit: "50mb",
     },
   },
-  output: "standalone", // required for Vercel deployments
 
+  // Required for Vercel deployments so it runs as a standalone app
+  output: "standalone",
+
+  // Ensure all paths work (e.g., refreshing /settings won't 404)
   async rewrites() {
     return [
-      // Redirect all unmatched routes to Next.js app
       {
         source: "/:path*",
-        destination: "/",
+        destination: "/", // Let Next.js handle all routes
       },
     ];
   },
