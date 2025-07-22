@@ -21,6 +21,14 @@ const verificationEmailRedirectURL = typeof process.env.NEXT_PUBLIC_BETTER_AUTH_
   ? `${process.env.NEXT_PUBLIC_BETTER_AUTH_URL}/verify-email`
   : 'http://localhost:3000/verify-email';
 
+if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is not set in environment variables.");
+if (!process.env.SMTP_HOST) throw new Error("SMTP_HOST is not set in environment variables.");
+if (!process.env.SMTP_PORT) throw new Error("SMTP_PORT is not set in environment variables.");
+if (!process.env.SMTP_USER) throw new Error("SMTP_USER is not set in environment variables.");
+if (!process.env.SMTP_PASS) throw new Error("SMTP_PASS is not set in environment variables.");
+if (!process.env.GOOGLE_CLIENT_ID) throw new Error("GOOGLE_CLIENT_ID is not set in environment variables.");
+if (!process.env.GOOGLE_CLIENT_SECRET) throw new Error("GOOGLE_CLIENT_SECRET is not set in environment variables.");
+
 const client = new MongoClient(process.env.MONGODB_URI!);
 const db = client.db();
 

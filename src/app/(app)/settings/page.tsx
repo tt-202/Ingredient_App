@@ -45,11 +45,16 @@ export default async function SettingsPage() {
         ...rest
     };
 
+    const safeSettings = {
+        ...cleanSettings,
+        _id: cleanSettings._id?.toString?.() ?? "",
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-100">
             <div className="w-full max-w-4xl bg-white/80 backdrop-blur-lg p-8 rounded-lg shadow-md border border-gray-200">
                 <h1 className="text-4xl font-bold mb-8 text-center text-gray-900 tracking-tight drop-shadow-sm">Settings</h1>
-                <SettingsForm initialSettings={cleanSettings} userId={userId} />
+                <SettingsForm initialSettings={safeSettings} userId={userId} />
             </div>
         </div>
     );
