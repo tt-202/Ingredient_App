@@ -27,17 +27,21 @@ export default async function SettingsPage() {
         };
     }
     // Remove _id and userId if present (to avoid React warnings)
-    const { _id, userId: _userId, ...rest } = userSettings as any;
+    const { _id, ...rest } = userSettings as any;
     const cleanSettings: {
+        _id: typeof _id;
         diet: string;
-        allergies: string[];
+        allergies: never[];
         spice_tolerance: number;
         sweetness_preference: number;
         saltiness_preference: number;
         acidity_sourness_preference: number;
         health_consciousness: number;
         budget_tolerance: number;
-    } = rest;
+    } = {
+        _id,
+        ...rest
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-100">
